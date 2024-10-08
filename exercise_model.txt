@@ -1,0 +1,1 @@
+- Tạo 3 model tuỳ ý trong đó có ít nhất 5 kiểu dữ liệu khác nhau và 1 model có 2 Foreignkey đến 2 model còn lại.

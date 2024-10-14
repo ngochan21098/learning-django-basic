@@ -3,6 +3,5 @@ from django.http import HttpResponse
 
 # Create your views here.
 
-def create_user(request):
+def create_user(req):
     return HttpResponse('OK')
-

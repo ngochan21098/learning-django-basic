@@ -7,6 +7,12 @@ class User(models.Model):
     salary = models.BigIntegerField()
     hometown = models.CharField(max_length=20)
 
+
+class Reservation(models.Model):
+    ref_no = models.CharField(max_length=20, primary_key=True)
+    name = models.CharField(max_length=20)
+    fit_id = models.CharField(max_length=20)
+
 class Application(models.Model):
     apl_no = models.SmallIntegerField(primary_key=True) 
     user = models.ForeignKey('users.User', on_delete=models.DO_NOTHING)
@@ -26,6 +32,7 @@ class Ticket(models.Model):
     ticket_no = models.SmallIntegerField(primary_key = True)
     apl_no = models.ForeignKey('users.Application', on_delete=models.DO_NOTHING)
 
+## Test
 
 
 

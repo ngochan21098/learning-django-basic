@@ -8,11 +8,35 @@ import json
 
 # Create your views here.
 
+@csrf_exempt 
+@require_http_methods(["POST"])
 def create_user(req):
-    user = User(name = 'Han', age = 17, salary = 1000, hometown = 'Vinh Phuc')
-    user1 = User(name = 'Mun', age = 18, salary = 1000, hometown = 'Ha Noi')
+    data = json.loads(req.body)
+    user = User(name = data['name'], age = data['age'], salary = data['salary'], hometown = data['hometown'])
     user.save()
-    user1.save()
+
+    return HttpResponse('OK')
+
+@csrf_exempt 
+@require_http_methods(["PUT"])
+def update_user(req):
+    data = json.loads(req.body)
+    name = data.get('name')
+    user_name = User.objects.filter(name=name)
+    for user in user_name: 
+        user = User(name = data['name'], age = data['age'], salary = data['salary'], hometown = data['hometown'])
+        user.save()
+
+    return HttpResponse('OK')
+
+@csrf_exempt 
+@require_http_methods(["DELETE"])
+def delete_user(req):
+    data = json.loads(req.body)
+    name = data.get('name')
+    user_name = User.objects.filter(name=name)
+    for user in user_name: 
+        user.delete()
 
     return HttpResponse('OK')
 

@@ -5,14 +5,24 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods 
 import json 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response #Import để dùng được các response mà fw hỗ trợ
+from .serializers import UserSerialize
 
 # Create your views here.
 
+@api_view(["POST"])
 def create_user(req):
-    user = User(name = 'Han', age = 17, salary = 1000, hometown = 'Vinh Phuc')
-    user1 = User(name = 'Mun', age = 18, salary = 1000, hometown = 'Ha Noi')
-    user.save()
-    user1.save()
+    # data = json.loads(req.body) -> Không cần do api_view đã parse data sang dictionary
+    data = req.data
+    # user = User(name = data['name'], age = data['age'], salary = data['salary'], hometown = data['hometown'])
+    # user.save()
+    ser = UserSerialize(data = data)
+    #is_valid để check xem data truyền lên có valid hay không
+    if not ser.is_valid():  
+        #.errors để in ra các lỗi mà framework hỗ trợ
+        return Response(ser.errors, status=400) 
+    
 
     return HttpResponse('OK')
 

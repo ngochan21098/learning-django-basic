@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Ticket, Application, User
+from .models import Ticket, Application, User, Traveller, Member
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods 
@@ -90,3 +90,37 @@ def deleting_user(req, name):
         for username in user_name: 
              username.delete()
         return Response("OK")
+
+@api_view(["PUT"])
+def updating_user(req, name):
+        data = req.data
+        user = User.objects.get(name = name) 
+        user.age = data['age']
+        user.salary = data['salary']
+        user.hometown = data['hometown']
+        user.save()
+        return Response("OK")
+
+@api_view(["POST"])
+def creating_user(req):
+        data = req.data
+        serialize= UserSerialize(data = data)
+        if not serialize.is_valid():
+            return Response(serialize.errors, status = 400)
+        if serialize:
+            return Response('User already exists')
+        serialize.save()
+
+        return Response(serialize.data)
+        
+
+@api_view(["POST"])
+def traveller_create(req):
+    data = req.data
+    member = Member.objects.get(mem_no = data['mem_no'])
+    app = Application.objects.get(apl_no = data['apl_no'])
+    tvl_no = Traveller.objects.last()
+    tvlno_new = tvl_no.traveller_no + 1
+    traveller = Traveller(traveller_no = tvlno_new, mem_no = member['mem_no'], apl_no = app['apl_no'], mem_birth = data['mem_birth'], mem_status = data['mem_status'], mem_name = data['mem_name'])
+    traveller.save()
+    return Response("OK")

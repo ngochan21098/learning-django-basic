@@ -10,4 +10,5 @@ urlpatterns = [
     path('application/create', views.application_create, name="application_create"),
     path("users/<str:name>/", views.listing_user, name = "listing_user"),
     path("delete/<str:name>/", views.deleting_user, name = "deleting_user"),
+    path("users/update/<str:name>/", views.update_user, name = "update-user"),
 ]

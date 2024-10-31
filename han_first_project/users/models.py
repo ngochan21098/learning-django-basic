@@ -7,6 +7,22 @@ class User(models.Model):
     salary = models.BigIntegerField()
     hometown = models.CharField(max_length=20)
 
+    @property
+    def rank_name(self):
+        app = Application.objects.filter(user=self.name).first()
+
+        if not app:
+            return "No rank"
+
+        if self.salary >= 1000 and self.salary <= 2000:
+            return f"apl_no: {app.apl_no}. Rank: Bach Kim."
+        else:
+            return f"apl_no: {app.apl_no}. Rank: Kim Cuong."
+
+    @property
+    def custom_field(self):
+        return f"{self.name} - {self.age}"
+
 
 class Reservation(models.Model):
     ref_no = models.CharField(max_length=20, primary_key=True)

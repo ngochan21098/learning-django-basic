@@ -28,10 +28,12 @@ class Traveller(models.Model):
     mem_name = models.CharField(max_length = 20)
     mem_birth = models.DateTimeField()
 
+    def get_year(self):
+         return self.mem_birth.year
+
 class Ticket(models.Model):
     ticket_no = models.SmallIntegerField(primary_key = True)
-    apl_no = models.ForeignKey('users.Application', on_delete=models.DO_NOTHING)
-
+    apl_no = models.ForeignKey('users.Application', on_delete=models.DO_NOTHING)  
 ## Test
 
 

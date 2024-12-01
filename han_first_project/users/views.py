@@ -103,7 +103,7 @@ def creating_traveller(req):
         tvl_no = Traveller.objects.last()
         tvl_no_new = tvl_no.traveller_no + 1
         traveller_no = Traveller(traveller_no = tvl_no_new) 
-        birthday = get_year(data['mem_birth'])
+        # birthday = get_year(data['mem_birth'])
         ser = TravellerSerialize(traveller_no, data = data)
         if not ser.is_valid():  
         #.errors để in ra các lỗi mà framework hỗ trợ

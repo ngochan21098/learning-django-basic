@@ -1,7 +1,7 @@
 # Dùng để validate dữ liệu
 
 from rest_framework import serializers
-from .models import User, Traveller, Member
+from .models import User, Traveller, Member, Application
 from datetime import datetime
 from django.http import HttpResponse
 
@@ -37,11 +37,11 @@ class UserSerialize(serializers.Serializer):
     instance.save()
     return instance
 class TravellerSerialize(serializers.ModelSerializer):
-#   mem_no = serializers.IntegerField()
-#   apl_no = serializers.IntegerField()
-  class Meta: 
-    model = Traveller
-    exclude = ['traveller_no']
+    mem_no = serializers.IntegerField()
+    apl_no = serializers.IntegerField()
+    class Meta: 
+        model = Traveller
+        exclude = ['traveller_no']
 
 # def validate(self, data):
 #     #validate data type
@@ -53,11 +53,19 @@ class TravellerSerialize(serializers.ModelSerializer):
 #     # Handle validate traveller_no
 
 #     return value
-# def validate_mem_no(self, value):
-#         # Check if the mem_no already exists in the database
-#         if not Member.objects.filter(mem_no=value).exist():
-#             raise serializers.ValidationError("This member number does not exist")
-#         return value 
-  
-def create(self, validated_data):
-    return Traveller.objects.create(**validated_data)
+    def validate_mem_no(self, value):
+            # Check if the mem_no already exists in the database
+            member =  Member.objects.filter(mem_no=value)
+            if not member:
+                raise serializers.ValidationError("This member number does not exist")
+            return member.first()
+    
+    def validate_apl_no(self, value):
+            # Check if the apl_no already exists in the database
+            application =  Application.objects.filter(apl_no=value)
+            if not application:
+                raise serializers.ValidationError("This application number does not exist")
+            return application.first()
+    
+    def create(self, validated_data):
+        return Traveller.objects.create(**validated_data)

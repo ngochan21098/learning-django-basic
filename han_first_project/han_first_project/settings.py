@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'users.middleware.middleware.AllowedIDMiddleware',
-    # 'users.middleware.middleware.RequireCustomHeaderMiddleware',
+    'users.middleware.middleware.RequireCustomHeaderMiddleware',
     'users.middleware.middleware.RequireCustomResponseMiddleware',
 ]
 

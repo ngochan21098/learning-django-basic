@@ -26,15 +26,17 @@ class AllowedIDMiddleware (MiddlewareMixin):
     # If IP is allowed we don't do anything
         return None
      
-# class RequireCustomHeaderMiddleware (MiddlewareMixin):
-#     def __call__(self, request):
-#     # Check if the required header is present
-#         expected_api_key = '123456'
-#         if request.headers.get('HTTP_API_KEY') != expected_api_key:
-#          return HttpResponseForbidden("Forbidden: Missing required header")
+class RequireCustomHeaderMiddleware (MiddlewareMixin):
+    def process_request(self, request):
+    # Check if the required header is present
+        expected_api_key = '123456'
+        print(request.headers.get('API_KEY'))
+        print(request.META.get('HTTP_API_KEY'))
+        if request.META.get('HTTP_API_KEY') != expected_api_key:
+         return HttpResponseForbidden("Forbidden: Missing required header")
         
-#     # Proceed with the request if header is present
-#         return None
+    # Proceed with the request if header is present
+        return None
     
 class RequireCustomResponseMiddleware (MiddlewareMixin):
     def process_response(self, request, response):

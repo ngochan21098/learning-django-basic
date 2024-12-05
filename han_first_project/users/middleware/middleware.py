@@ -31,9 +31,7 @@ class RequireCustomHeaderMiddleware (MiddlewareMixin):
     # Check if the required header is present
         expected_api_key = '123456'
         path = request.META.get('PATH_INFO', '')
-        print(path)
-        if '/users' in path:
-            if request.META.get('HTTP_API_KEY') != expected_api_key:
+        if '/users' in path and request.META.get('HTTP_API_KEY') != expected_api_key:
                 return HttpResponseForbidden("Forbidden: Missing required header")
         
     # Proceed with the request if header is present

@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from .models import Ticket, Application, User, Traveller, Member
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -7,7 +6,7 @@ from django.views.decorators.http import require_http_methods
 import json 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response #Import để dùng được các response mà fw hỗ trợ
-from .serializers import UserSerialize
+from .serializers import UserSerialize, TravellerSerialize
 from django.forms.models import model_to_dict
 
 # Create your views here.
@@ -84,6 +83,13 @@ def listing_user(req, name):
     except:
         return Response("Can not find user", status = 404)
     
+@api_view(["POST"])
+def creating_member(req):  
+        data = req.data
+        member = Member(mem_no = data['mem_no'])
+        member.save()
+        return Response('OK')
+    
 @api_view(["DELETE"])
 def deleting_user(req, name):
         user_name = User.objects.filter(name = name) 
@@ -91,6 +97,25 @@ def deleting_user(req, name):
              username.delete()
         return Response("OK")
 
+@api_view(["POST"])
+def creating_traveller(req):
+        data = req.data
+        tvl_no = Traveller.objects.last()
+        tvl_no_new = tvl_no.traveller_no + 1
+        traveller_no = Traveller(traveller_no = tvl_no_new) 
+        # birthday = get_year(data['mem_birth'])
+        ser = TravellerSerialize(traveller_no, data = data)
+        if not ser.is_valid():  
+        #.errors để in ra các lỗi mà framework hỗ trợ
+            return Response(ser.errors, status=400)
+        ser.save() # => True 
+        return Response('OK')
+
+@api_view(["GET"])
+def listing_traveller(req, traveller_no):
+        traveller = Traveller.objects.get(traveller_no = traveller_no)
+        ser = TravellerSerialize(traveller)
+        return Response(ser.data)
 @api_view(["PUT"])
 def updating_user(req, name):
         data = req.data

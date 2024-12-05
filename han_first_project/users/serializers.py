@@ -1,7 +1,9 @@
 # Dùng để validate dữ liệu
 
 from rest_framework import serializers
-from .models import User
+from .models import User, Traveller, Member, Application
+from datetime import datetime
+from django.http import HttpResponse
 
 class UserSerialize(serializers.Serializer):
   name = serializers.CharField(max_length=20)
@@ -34,4 +36,36 @@ class UserSerialize(serializers.Serializer):
     instance.hometown = validated_data.get('hometown', instance.hometown)
     instance.save()
     return instance
+class TravellerSerialize(serializers.ModelSerializer):
+    mem_no = serializers.IntegerField()
+    apl_no = serializers.IntegerField()
+    class Meta: 
+        model = Traveller
+        exclude = ['traveller_no']
 
+# def validate(self, data):
+#     #validate data type
+#     if data['mem_no'] > 5:
+#       raise serializers.ValidationError("number is too low")
+
+#     return data
+# def validate_traveller_no(self, value): #tên hàm phải có dạng validate+tên_field
+#     # Handle validate traveller_no
+
+#     return value
+    def validate_mem_no(self, value):
+            # Check if the mem_no already exists in the database
+            member =  Member.objects.filter(mem_no=value)
+            if not member:
+                raise serializers.ValidationError("This member number does not exist")
+            return member.first()
+    
+    def validate_apl_no(self, value):
+            # Check if the apl_no already exists in the database
+            application =  Application.objects.filter(apl_no=value)
+            if not application:
+                raise serializers.ValidationError("This application number does not exist")
+            return application.first()
+    
+    def create(self, validated_data):
+        return Traveller.objects.create(**validated_data)

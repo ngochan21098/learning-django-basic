@@ -30,8 +30,7 @@ class Traveller(models.Model):
 
 class Ticket(models.Model):
     ticket_no = models.SmallIntegerField(primary_key = True)
-    apl_no = models.ForeignKey('users.Application', on_delete=models.DO_NOTHING)
-
+    apl_no = models.ForeignKey('users.Application', on_delete=models.DO_NOTHING)  
 ## Test
 
 

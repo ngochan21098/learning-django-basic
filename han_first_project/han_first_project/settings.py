@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'users',
     'rest_framework',
     'corsheaders',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -50,7 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'users.middleware.middleware.AllowedIDMiddleware',
+    # 'users.middleware.middleware.AllowedIDMiddleware',
     'users.middleware.middleware.RequireCustomHeaderMiddleware',
     'users.middleware.middleware.RequireCustomResponseMiddleware',
 ]
@@ -94,7 +95,8 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost',
+        'HOST': 'my-postgres',
+        # 'HOST': 'localhost',
         'PORT': '5432'
     }
 }
